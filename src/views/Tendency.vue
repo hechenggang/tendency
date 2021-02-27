@@ -4,7 +4,6 @@
     <p class="title">趋势</p>
     <span>分类：</span>
     <select v-model="sort">
-      <option value="0">标识</option>
       <option value="1">总回复</option>
       <option value="2">一天回复增量</option>
       <option value="3">三天回复增量</option>
@@ -60,20 +59,18 @@ export default {
   },
   data: function () {
     return {
-      sort:0,
+      sort:7,
       limit:10,
       pagination: false,
       columns: [
         {
           title: "序号",
           dataIndex: "index",
-          align:"center",
-          width:70
+          align:"center"
         },
         {
           title: "标识",
           dataIndex: "a",
-          sorter: (a, b) => a.a - b.a,
           scopedSlots: { customRender: "a" },
           align:"center",
         },
@@ -163,7 +160,7 @@ export default {
       }
       this.$root.loading = true;
       axios
-        .get(this_url)
+        .get(this_url, {headers: {"x-api-code": localStorage["x-api-code"]}})
         .then((response) => {
           let a = [];
           response.data.forEach((element,index) => {
@@ -189,7 +186,12 @@ export default {
           }
         })
         .catch((error) => {
-          alert("服务端错误，稍后刷新一下试试");
+          if (error.response.status in {  400: "",401: "", 403: "" }) {
+            delete localStorage["x-api-code"];
+            location.assign("/#/login");
+          }else{
+            alert("服务端错误，稍后刷新一下试试");
+          }
         })
         .finally(() => {
           this.$root.loading = false;

@@ -3,6 +3,23 @@
     <Loading v-if="$root.loading" />
     <p class="title">标题：{{ title }}</p>
     <p class="title">链接：{{ link }}</p>
+    <p  v-if="attachments.length" class="title">附件：
+      <span v-for="(item, index) in attachments" :key="item">
+        <a class="link" :href="item">附件{{index+1}}</a>
+      </span>
+    </p>
+    <p  v-if="pictures.length" class="title">图片：
+      <span v-for="(item, index) in pictures" :key="item">
+        <a class="link" :href="item">图片{{index+1}}</a>
+      </span>
+    </p>
+    <p  v-if="magnets.length" class="title">磁力链：</p>
+    <ul v-if="magnets.length">
+      <li v-for="item in magnets" :key="item">
+          <span class="link">{{ item }}</span>
+      </li>
+    </ul>
+
     <p class="title">趋势：</p>
     <hr />
     <div id="chart"></div>
@@ -23,6 +40,9 @@ export default {
     return {
       title: "",
       link: "",
+      magnets: [],
+      pictures: [],
+      attachments: [],
     };
   },
   directives: {
@@ -37,7 +57,7 @@ export default {
     this.get_one(this.$route.params.pid);
   },
   methods: {
-    get_data_by_url: function (this_url) {
+    get_data_by_url: function (this_url,callback) {
       if (this_url === this.$root.before_url) {
         return "";
       } else {
@@ -45,28 +65,35 @@ export default {
       }
       this.$root.loading = true;
       axios
-        .get(this_url)
+        .get(this_url, {headers: {"x-api-code": localStorage["x-api-code"]}})
         .then((response) => {
           this.$root.data = response.data;
           console.log(this.$root.data);
-          this.run_chart(response);
-          if (this.$root.data.length == 0) {
-            alert("真的没有了");
-          }
+          callback(response);
         })
         .catch((error) => {
-          alert("服务端错误，稍后刷新一下试试");
+          if (error.response.status in {  400: "",401: "", 403: "" }) {
+            delete localStorage["x-api-code"];
+            location.assign("/#/login");
+          }else{
+            alert("服务端错误，稍后刷新一下试试");
+          }
         })
         .finally(() => {
           this.$root.loading = false;
         });
     },
+    
     get_one: function (pid) {
-      this.get_data_by_url(this.$root.api.one + "?pid=" + pid);
+      this.get_data_by_url(this.$root.api.one + "?pid=" + pid,this.run_chart);
     },
+
     run_chart: function (response) {
       this.title = response.data.postTitle;
       this.link = response.data.postLink;
+      this.magnets = response.data.magnets;
+      this.pictures = response.data.pictures;
+      this.attachments = response.data.attachments;
       var myChart = echarts.init(document.getElementById("chart"));
       var option = {
         tooltip: {

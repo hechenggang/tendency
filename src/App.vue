@@ -22,8 +22,6 @@ html {
 
 ul {
   list-style: none;
-  border-top: 1.5px solid #1a2b3c;
-  margin: 0.5rem 0rem;
 }
 
 li {
@@ -32,7 +30,6 @@ li {
   line-height: 1.5rem;
   font-size: 1rem;
   color: #1a2b3c;
-  border-bottom: 1.5px solid #1a2b3c;
 }
 
 hr {
