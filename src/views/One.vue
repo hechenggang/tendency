@@ -3,23 +3,24 @@
     <Loading v-if="$root.loading" />
     <p class="title">标题：{{ title }}</p>
     <p class="title">链接：{{ link }}</p>
-    <p  v-if="attachments.length" class="title">附件：
-      <span v-for="(item, index) in attachments" :key="item">
+    <p  v-if="attachments.length" class="title">附件：</p>
+    <ul v-if="attachments.length">
+      <li  v-for="(item, index) in attachments" :key="item">
         <a class="link" :href="item">附件{{index+1}}</a>
-      </span>
-    </p>
-    <p  v-if="pictures.length" class="title">图片：
-      <span v-for="(item, index) in pictures" :key="item">
+      </li>
+    </ul>
+    <p  v-if="pictures.length" class="title">图片：</p>
+    <ul v-if="pictures.length">
+      <li  v-for="(item, index) in pictures" :key="item">
         <a class="link" :href="item">图片{{index+1}}</a>
-      </span>
-    </p>
+      </li>
+    </ul>
     <p  v-if="magnets.length" class="title">磁力链：</p>
     <ul v-if="magnets.length">
       <li v-for="item in magnets" :key="item">
           <span class="link">{{ item }}</span>
       </li>
     </ul>
-
     <p class="title">趋势：</p>
     <hr />
     <div id="chart"></div>

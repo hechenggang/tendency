@@ -1,8 +1,8 @@
 <template>
   <div class="box">
     <Loading v-if="$root.loading" />
-    <p class="title">趋势</p>
-    <span>分类：</span>
+    <p class="title">Tendency</p>
+    <span>Sort：</span>
     <select v-model="sort">
       <option value="1">总回复</option>
       <option value="2">一天回复增量</option>
@@ -15,7 +15,7 @@
       <option value="9">七天浏览增量</option>
       <option value="10">三十天浏览增量</option>
     </select>
-    <span class="brief">数量：</span>
+    <span class="brief">Limit：</span>
     <select v-model="limit">
       <option>10</option>
       <option>25</option>
@@ -32,7 +32,7 @@
       :pagination="pagination"
       :columns="columns"
       :data-source="$root.data"
-      :scroll="{ y: 480 }"
+      
       bordered
     >
       <router-link
@@ -63,11 +63,7 @@ export default {
       limit:10,
       pagination: false,
       columns: [
-        {
-          title: "序号",
-          dataIndex: "index",
-          align:"center"
-        },
+
         {
           title: "标识",
           dataIndex: "a",
