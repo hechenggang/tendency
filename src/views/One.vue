@@ -5,8 +5,8 @@
     <p class="title">链接：{{ link }}</p>
     <p  v-if="attachments.length" class="title">附件：</p>
     <ul v-if="attachments.length">
-      <li  v-for="(item, index) in attachments" :key="item">
-        <a class="link" :href="item">附件{{index+1}}</a>
+      <li  v-for="(item, index) in attachments" :key="index">
+        <a class="link" :href="item[1]">{{item[0]}}</a>
       </li>
     </ul>
     <p  v-if="pictures.length" class="title">图片：</p>
